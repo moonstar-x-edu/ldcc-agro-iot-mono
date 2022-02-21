@@ -1,0 +1,23 @@
+name: Heroku Deploy
+
+on:
+  repository_dispatch:
+    types: [deploy]
+  workflow_dispatch:
+
+jobs:
+  build_push:
+    name: Build Docker Image and Push to Docker Hub
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v2
+
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          use_docker: true
