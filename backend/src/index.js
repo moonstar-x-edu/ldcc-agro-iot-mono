@@ -5,7 +5,7 @@ const cors = require('cors');
 const logger = require('@greencoast/logger');
 
 const HTTP_PORT = process.env.PORT || 4000;
-const WEBAPP_DIR = process.env.WEBAPP_DIR;
+const { WEBAPP_DIR } = process.env;
 
 if (!fs.existsSync(WEBAPP_DIR)) {
   throw new ReferenceError(`${WEBAPP_DIR} does not exist!`);
