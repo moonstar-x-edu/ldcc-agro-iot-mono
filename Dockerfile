@@ -24,6 +24,6 @@ COPY backend/package*.json ./
 RUN npm ci --only=prod
 COPY backend/ ./
 
-ENV WEBAPP_DIR="/opt/app/webapp"
+ENV WEBAPP_DIR="/opt/webapp"
 
 CMD ["npm", "start"]
