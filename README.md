@@ -1,2 +1,3 @@
-# iot-agro-backend
-(USFQ-S7/Proyectos Análisis y Gerencia) - Backend for an IoT agricultural project.
+# lcdd-agro-iot-mono
+
+Prototype for an agricultural IoT project.
