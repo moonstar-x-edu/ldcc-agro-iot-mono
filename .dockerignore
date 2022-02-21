@@ -1,0 +1,24 @@
+# OS Generated
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Thrashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.idea/
+
+# Node
+*/node_modules
+*/*.env
+
+# Root files
+*/.eslintignore
+*/.eslintrc
+*/.gitignore
+
+# Git
+.git
+.github
