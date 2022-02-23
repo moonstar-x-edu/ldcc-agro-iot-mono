@@ -1,5 +1,9 @@
-const ResourceNotFoundError = require('./ResourceNotFound');
+const ResourceNotFoundError = require('./ResourceNotFoundError');
+const InvalidBodyError = require('./InvalidBodyError');
+const ResourceAlreadyExistsError = require('./ResourceAlreadyExistsError');
 
 module.exports = {
-  ResourceNotFoundError
+  ResourceNotFoundError,
+  InvalidBodyError,
+  ResourceAlreadyExistsError
 };
