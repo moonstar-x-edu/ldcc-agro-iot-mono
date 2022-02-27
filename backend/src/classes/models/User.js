@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { v4: uuid } = require('uuid');
+const { Schema: MongoSchema } = require('mongoose');
 const SchemaValidator = require('../SchemaValidator');
 
 class User {
@@ -8,15 +8,7 @@ class User {
   }
 
   static from(obj, isNew = true) {
-    if (!isNew) {
-      return new User(SchemaValidator.validate(obj, User.UPDATE_SCHEMA));
-    }
-
-    const data = SchemaValidator.validate(obj, User.CREATE_SCHEMA);
-
-    data.id = uuid();
-
-    return new User(data);
+    return new User(SchemaValidator.validate(obj, isNew ? User.CREATE_SCHEMA : User.UPDATE_SCHEMA));
   }
 }
 
@@ -34,6 +26,25 @@ User.UPDATE_SCHEMA = Joi.object({
   lastName: Joi.string().trim(),
   profileURL: Joi.string().uri().allow(null).allow(''),
   devices: Joi.forbidden()
+});
+
+User.MONGO_SCHEMA = new MongoSchema({
+  name: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: true
+  },
+  profileURL: {
+    type: String,
+    required: true
+  },
+  devices: {
+    type: [String],
+    required: true
+  }
 });
 
 module.exports = User;

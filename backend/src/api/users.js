@@ -11,16 +11,23 @@ router.use(bodyParser.json());
 /* TODO: GET / */
 /* TODO: POST / */
 
-router.post('/', (req, res) => {
+router.post('/', async(req, res, next) => {
   const { body } = req;
+  const { users: db } = req.app.get('mongo');
 
   if (!body || Object.keys(body).length < 1 ) {
     throw new InvalidBodyError(Response.DEFAULT_MESSAGES.MISSING_JSON_BODY);
   }
 
-  const user = User.from(body).data;
-  const response = new Response(Response.CODES.CREATED);
-  return res.status(response.code).send(response.create(user));
+  try {
+    const user = User.from(body).data;
+    await db.create(user);
+
+    const response = new Response(Response.CODES.CREATED);
+    return res.status(response.code).send(response.create(user.data));
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.all('/', onlySupportedMethods(['GET', 'POST']));
