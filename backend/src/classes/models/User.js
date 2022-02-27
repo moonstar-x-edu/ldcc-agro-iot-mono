@@ -25,7 +25,7 @@ User.UPDATE_SCHEMA = Joi.object({
   id: Joi.forbidden(),
   name: Joi.string().trim(),
   lastName: Joi.string().trim(),
-  email: Joi.string().trim(),
+  email: Joi.forbidden(),
   profileURL: Joi.string().uri().allow(null).allow(''),
   devices: Joi.forbidden()
 });

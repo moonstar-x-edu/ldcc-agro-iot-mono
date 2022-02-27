@@ -8,17 +8,24 @@ const { InvalidBodyError } = require('../errors');
 const router = new express.Router();
 router.use(bodyParser.json());
 
-/* TODO: GET / */
+router.get('/', async(req, res) => {
+  const { users: db } = req.app.get('mongo');
+
+  const docs = await db.getAll();
+
+  const response = new Response(Response.CODES.OK);
+  return res.status(response.code).send(response.create(docs));
+});
 
 router.post('/', async(req, res, next) => {
   const { body } = req;
   const { users: db } = req.app.get('mongo');
 
-  if (!body || Object.keys(body).length < 1 ) {
-    throw new InvalidBodyError(Response.DEFAULT_MESSAGES.MISSING_JSON_BODY);
-  }
-
   try {
+    if (!body || Object.keys(body).length < 1 ) {
+      throw new InvalidBodyError(Response.DEFAULT_MESSAGES.MISSING_JSON_BODY);
+    }
+
     const user = User.from(body);
     const doc = await db.create(user);
 
@@ -59,7 +66,24 @@ router.delete('/:id', async(req, res, next) => {
   }
 });
 
-/* TODO: PATCH /:id */
+router.patch('/:id', async(req, res, next) => {
+  const { body, params: { id } } = req;
+  const { users: db } = req.app.get('mongo');
+
+  try {
+    if (!body || Object.keys(body).length < 1 ) {
+      throw new InvalidBodyError(Response.DEFAULT_MESSAGES.MISSING_JSON_BODY);
+    }
+
+    const user = User.from(body, false);
+    const doc = await db.update(id, user);
+
+    const response = new Response(Response.CODES.OK);
+    return res.status(response.code).send(response.create(doc));
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.all('/:id', onlySupportedMethods(['GET', 'DELETE', 'PATCH']));
 
