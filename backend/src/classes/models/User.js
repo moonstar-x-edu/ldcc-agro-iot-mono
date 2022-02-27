@@ -7,7 +7,7 @@ class User {
     this.data = data;
   }
 
-  static from(obj, isNew = false) {
+  static from(obj, isNew = true) {
     if (!isNew) {
       return new User(SchemaValidator.validate(obj, User.UPDATE_SCHEMA));
     }
