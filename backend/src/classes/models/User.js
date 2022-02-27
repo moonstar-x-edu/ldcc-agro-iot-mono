@@ -16,6 +16,7 @@ User.CREATE_SCHEMA = Joi.object({
   id: Joi.forbidden(),
   name: Joi.string().trim().required(),
   lastName: Joi.string().trim().required(),
+  email: Joi.string().email().required(),
   profileURL: Joi.string().uri().allow(null).allow('').default(null),
   devices: Joi.forbidden().default([])
 });
@@ -24,6 +25,7 @@ User.UPDATE_SCHEMA = Joi.object({
   id: Joi.forbidden(),
   name: Joi.string().trim(),
   lastName: Joi.string().trim(),
+  email: Joi.string().trim(),
   profileURL: Joi.string().uri().allow(null).allow(''),
   devices: Joi.forbidden()
 });
@@ -34,6 +36,10 @@ User.MONGO_SCHEMA = new MongoSchema({
     required: true
   },
   lastName: {
+    type: String,
+    required: true
+  },
+  email: {
     type: String,
     required: true
   },
