@@ -20,11 +20,11 @@ router.post('/', async(req, res, next) => {
   }
 
   try {
-    const user = User.from(body).data;
-    await db.create(user);
+    const user = User.from(body);
+    const doc = await db.create(user);
 
     const response = new Response(Response.CODES.CREATED);
-    return res.status(response.code).send(response.create(user.data));
+    return res.status(response.code).send(response.create(doc));
   } catch (error) {
     next(error);
   }

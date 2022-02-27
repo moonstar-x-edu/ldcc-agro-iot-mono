@@ -39,7 +39,7 @@ User.MONGO_SCHEMA = new MongoSchema({
   },
   profileURL: {
     type: String,
-    required: true
+    required: false
   },
   devices: {
     type: [String],

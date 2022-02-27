@@ -12,7 +12,6 @@
   "engines": {
     "node": ">=16.6"
   },
-  "type": "module",
   "keywords": [],
   "author": "LDCC",
   "license": "MIT",
@@ -29,7 +28,6 @@
     "express": "^4.17.3",
     "joi": "^17.6.0",
     "mongoose": "^6.2.2",
-    "normalize-mongoose": "^1.0.0",
     "on-finished": "^2.3.0"
   }
 }
