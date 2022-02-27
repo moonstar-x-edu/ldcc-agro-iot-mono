@@ -9,7 +9,6 @@ const router = new express.Router();
 router.use(bodyParser.json());
 
 /* TODO: GET / */
-/* TODO: POST / */
 
 router.post('/', async(req, res, next) => {
   const { body } = req;
@@ -32,7 +31,20 @@ router.post('/', async(req, res, next) => {
 
 router.all('/', onlySupportedMethods(['GET', 'POST']));
 
-/* TODO: GET /:id */
+router.get('/:id', async(req, res, next) => {
+  const { id } = req.params;
+  const { users: db } = req.app.get('mongo');
+
+  try {
+    const doc = await db.get(id);
+
+    const response = new Response(Response.CODES.OK);
+    return res.status(response.code).send(response.create(doc));
+  } catch (error) {
+    next(error);
+  }
+});
+
 /* TODO: DELETE /:id */
 /* TODO: PATCH /:id */
 

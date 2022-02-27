@@ -1,6 +1,7 @@
 const logger = require('@greencoast/logger');
+const { CastError } = require('mongoose');
 const User = require('../classes/models/User');
-const { InvalidBodyError, ResourceAlreadyExistsError } = require('../errors');
+const { InvalidBodyError, ResourceAlreadyExistsError, ResourceNotFoundError } = require('../errors');
 const { MONGO_CODES, MONGO_TO_JSON_OPTIONS } = require('../constants');
 
 class UsersDatabase {
@@ -9,6 +10,24 @@ class UsersDatabase {
 
     User.MONGO_SCHEMA.options.toJSON = MONGO_TO_JSON_OPTIONS;
     this.UserModel = this.mongo.model('User', User.MONGO_SCHEMA);
+  }
+
+  async get(id) {
+    try {
+      const doc = await this.UserModel.findById(id);
+
+      if (!doc) {
+        throw new ResourceNotFoundError(`User ${id} does not exist.`);
+      }
+
+      return doc;
+    } catch (error) {
+      if (error instanceof CastError) {
+        throw new ResourceNotFoundError(`User ${id} does not exist.`);
+      }
+
+      throw error;
+    }
   }
 
   async create(user) {
