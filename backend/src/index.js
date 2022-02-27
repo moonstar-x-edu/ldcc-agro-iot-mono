@@ -5,6 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const logger = require('@greencoast/logger');
 const apiRouter = require('./api');
+const MongoManager = require('./db/MongoManager');
 const { logRequests, handleError } = require('./middleware');
 const { ResourceNotFoundError } = require('./errors');
 
@@ -20,6 +21,8 @@ const WEBAPP_INDEX = path.join(WEBAPP_DIR, './index.html');
 const app = express();
 app.use(cors());
 app.use(logRequests);
+
+app.set('mongo', new MongoManager(process.env.MONGODB_URI));
 
 app.options('*', cors());
 
