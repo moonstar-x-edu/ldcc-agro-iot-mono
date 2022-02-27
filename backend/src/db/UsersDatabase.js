@@ -49,6 +49,25 @@ class UsersDatabase {
       throw error;
     }
   }
+
+  async delete(id) {
+    try {
+      const doc = await this.UserModel.findByIdAndDelete(id);
+
+      if (!doc) {
+        throw new ResourceNotFoundError(`User ${id} does not exist.`);
+      }
+
+      logger.info(`(MONGO): Deleted user with ID ${doc.id}`);
+      return doc;
+    } catch (error) {
+      if (error instanceof CastError) {
+        throw new ResourceNotFoundError(`User ${id} does not exist.`);
+      }
+
+      throw error;
+    }
+  }
 }
 
 module.exports = UsersDatabase;

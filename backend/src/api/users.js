@@ -45,7 +45,20 @@ router.get('/:id', async(req, res, next) => {
   }
 });
 
-/* TODO: DELETE /:id */
+router.delete('/:id', async(req, res, next) => {
+  const { id } = req.params;
+  const { users: db } = req.app.get('mongo');
+
+  try {
+    const doc = await db.delete(id);
+
+    const response = new Response(Response.CODES.OK);
+    return res.status(response.code).send(response.create(doc));
+  } catch (error) {
+    next(error);
+  }
+});
+
 /* TODO: PATCH /:id */
 
 router.all('/:id', onlySupportedMethods(['GET', 'DELETE', 'PATCH']));
