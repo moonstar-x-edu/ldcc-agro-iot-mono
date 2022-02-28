@@ -76,6 +76,8 @@ class DeviceDatabase {
         logger.info(`(MONGO): Removed device ${id} from the device list for user ${user.id}`);
       }));
 
+      // Delete measures
+
       logger.info(`(MONGO): Deleted device with ID ${doc.id}`);
       return doc;
     } catch (error) {

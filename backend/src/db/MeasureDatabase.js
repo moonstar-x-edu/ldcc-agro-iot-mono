@@ -13,8 +13,16 @@ class MeasureDatabase {
     this.MeasureModel = this.mongo.model('Measure', Measure.MONGO_SCHEMA);
   }
 
-  getForDevice(deviceId) {
-    return this.MeasureModel.find({ deviceId });
+  async getForDevice(deviceId) {
+    try {
+      return await this.MeasureModel.find({ deviceId });
+    } catch (error) {
+      if (error instanceof CastError) {
+        throw new ResourceNotFoundError(`Device ${deviceId} does not exist.`);
+      }
+
+      throw error;
+    }
   }
 
   async get(id) {

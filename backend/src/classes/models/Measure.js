@@ -7,9 +7,10 @@ class Measure {
     this.data = data;
   }
 
-  static from(obj) {
+  static from(obj, deviceId) {
     const validated = SchemaValidator.validate(obj, Measure.CREATE_SCHEMA);
     validated.createdAt = (new Date()).toISOString();
+    validated.deviceId = deviceId;
 
     return new Measure(validated);
   }
