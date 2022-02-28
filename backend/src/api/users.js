@@ -101,9 +101,7 @@ router.get('/:userId/devices', async(req, res, next) => {
   }
 });
 
-/* TODO: POST /:userId/devices */
-
-router.all('/:userId/devices', onlySupportedMethods(['GET', 'POST']));
+router.all('/:userId/devices', onlySupportedMethods(['GET']));
 
 router.get('/:userId/devices/:deviceId', async(req, res, next) => {
   const { userId, deviceId } = req.params;
@@ -126,8 +124,34 @@ router.get('/:userId/devices/:deviceId', async(req, res, next) => {
   }
 });
 
-/* TODO: DELETE /:userId/devices/:deviceId */
+router.post('/:userId/devices/:deviceId', async(req, res, next) => {
+  const { userId, deviceId } = req.params;
+  const { users: usersDB } = req.app.get('mongo');
 
-router.all('/:userId/devices/:deviceId', onlySupportedMethods(['GET', 'DELETE']));
+  try {
+    const updatedUser = await usersDB.addDeviceForUser(userId, deviceId);
+
+    const response = new Response(Response.CODES.OK);
+    return res.status(response.code).send(response.create(updatedUser));
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete('/:userId/devices/:deviceId', async(req, res, next) => {
+  const { userId, deviceId } = req.params;
+  const { users: usersDB } = req.app.get('mongo');
+
+  try {
+    const updatedUser = await usersDB.deleteDeviceForUser(userId, deviceId);
+
+    const response = new Response(Response.CODES.OK);
+    return res.status(response.code).send(response.create(updatedUser));
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.all('/:userId/devices/:deviceId', onlySupportedMethods(['GET', 'POST', 'DELETE']));
 
 module.exports = router;

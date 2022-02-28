@@ -1,7 +1,7 @@
 const logger = require('@greencoast/logger');
 const { CastError } = require('mongoose');
 const User = require('../classes/models/User');
-const { InvalidBodyError, ResourceAlreadyExistsError, ResourceNotFoundError } = require('../errors');
+const { InvalidBodyError, ResourceAlreadyExistsError, ResourceNotFoundError, ResourceForbiddenError } = require('../errors');
 const { MONGO_CODES, MONGO_TO_JSON_OPTIONS } = require('../constants');
 
 class UsersDatabase {
@@ -103,6 +103,38 @@ class UsersDatabase {
     return Promise.all(user.devices.map((deviceId) => {
       return this.manager.devices.get(deviceId);
     }));
+  }
+
+  async addDeviceForUser(userId, deviceId) {
+    const user = await this.get(userId);
+    const device = await this.manager.devices.get(deviceId);
+
+    const userHasDevice = user.devices.some((id) => id === device.id);
+    if (userHasDevice) {
+      throw new ResourceAlreadyExistsError(`User ${userId} already has access to device ${deviceId}`);
+    }
+
+    const updated = await this.update(userId, new User({ devices: [...user.devices, deviceId] }));
+
+    logger.info(`(MONGO): Added device ${deviceId} to the device list for user ${userId}`);
+    return updated;
+  }
+
+  async deleteDeviceForUser(userId, deviceId) {
+    const user = await this.get(userId);
+    const device = await this.manager.devices.get(deviceId);
+
+    const userHasDevice = user.devices.some((id) => id === device.id);
+    if (!userHasDevice) {
+      throw new ResourceForbiddenError(`User ${userId} does not have access to device ${deviceId}`);
+    }
+
+    const updated = await this.update(userId, new User({
+      devices: user.devices.filter((id) => id !== deviceId)
+    }));
+
+    logger.info(`(MONGO): Removed device ${deviceId} from the device list for user ${userId}`);
+    return updated;
   }
 }
 
