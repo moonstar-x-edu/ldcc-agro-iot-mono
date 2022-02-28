@@ -1,6 +1,7 @@
 const logger = require('@greencoast/logger');
 const { CastError } = require('mongoose');
 const Device = require('../classes/models/Device');
+const User = require('../classes/models/User');
 const { InvalidBodyError, ResourceAlreadyExistsError, ResourceNotFoundError } = require('../errors');
 const { MONGO_CODES, MONGO_TO_JSON_OPTIONS } = require('../constants');
 
@@ -44,7 +45,11 @@ class DeviceDatabase {
 
     try {
       const doc = (await model.save()).toJSON();
-      logger.info(`(MONGO): Created new device with ID ${doc.id} for owner ${owner.id}`);
+      logger.info(`(MONGO): Created new device with ID ${doc.id}`);
+
+      await this.manager.users.update(owner.id, new User({ devices: [...owner.devices, doc.id] }));
+      logger.info(`(MONGO): Added device ${doc.id} to the device list for user ${owner.id}`);
+
       return doc;
     } catch (error) {
       if (error.code === MONGO_CODES.DUPLICATE) {
