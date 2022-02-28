@@ -5,8 +5,9 @@ const { InvalidBodyError, ResourceAlreadyExistsError, ResourceNotFoundError } = 
 const { MONGO_CODES, MONGO_TO_JSON_OPTIONS } = require('../constants');
 
 class UsersDatabase {
-  constructor(mongo) {
-    this.mongo = mongo;
+  constructor(manager) {
+    this.manager = manager;
+    this.mongo = manager.mongo;
 
     User.MONGO_SCHEMA.options.toJSON = MONGO_TO_JSON_OPTIONS;
     this.UserModel = this.mongo.model('User', User.MONGO_SCHEMA);

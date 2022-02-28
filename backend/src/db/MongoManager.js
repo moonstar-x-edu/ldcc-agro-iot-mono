@@ -1,13 +1,15 @@
 const mongoose = require('mongoose');
 const logger = require('@greencoast/logger');
 const UsersDatabase = require('./UsersDatabase');
+const DeviceDatabase = require('./DeviceDatabase');
 
 class MongoManager {
   constructor(uri) {
     this.mongo = this._createConnection(uri);
     this.registerConnectionEvents();
 
-    this.users = new UsersDatabase(this.mongo);
+    this.users = new UsersDatabase(this);
+    this.devices = new DeviceDatabase(this);
   }
 
   _createConnection(uri) {
