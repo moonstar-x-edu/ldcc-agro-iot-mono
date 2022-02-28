@@ -68,7 +68,13 @@ class DeviceDatabase {
         throw new ResourceNotFoundError(`Device ${id} does not exist.`);
       }
 
-      // Delete device from users that have access to it.
+      const usersWithDevice = await this.manager.users.getUsersWithAccessToDevice(id);
+      await Promise.all(usersWithDevice.map(async(user) => {
+        await this.manager.users.update(user.id, new User({
+          devices: user.devices.filter((deviceId) => deviceId !== id)
+        }));
+        logger.info(`(MONGO): Removed device ${id} from the device list for user ${user.id}`);
+      }));
 
       logger.info(`(MONGO): Deleted device with ID ${doc.id}`);
       return doc;

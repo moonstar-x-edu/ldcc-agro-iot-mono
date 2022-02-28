@@ -136,6 +136,10 @@ class UsersDatabase {
     logger.info(`(MONGO): Removed device ${deviceId} from the device list for user ${userId}`);
     return updated;
   }
+
+  getUsersWithAccessToDevice(deviceId) {
+    return this.UserModel.find({ devices: deviceId });
+  }
 }
 
 module.exports = UsersDatabase;
