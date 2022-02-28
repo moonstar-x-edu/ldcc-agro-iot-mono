@@ -88,6 +88,20 @@ class MeasureDatabase {
       throw error;
     }
   }
+
+  async deleteForDevice(deviceId) {
+    try {
+      const docs = await this.MeasureModel.deleteMany({ deviceId });
+      logger.info(`(MONGO): Removed all measures for device ${deviceId}`);
+      return docs;
+    } catch (error) {
+      if (error instanceof CastError) {
+        throw new ResourceNotFoundError(`Device ${deviceId} does not exist.`);
+      }
+
+      throw error;
+    }
+  }
 }
 
 module.exports = MeasureDatabase;

@@ -41,7 +41,21 @@ router.post('/', async(req, res, next) => {
   }
 });
 
-router.all('/', onlySupportedMethods(['GET', 'POST']));
+router.delete('/', async(req, res, next) => {
+  try {
+    const { deviceId } = req.params;
+    const { measures: db } = req.app.get('mongo');
+
+    const docs = await db.deleteForDevice(deviceId);
+
+    const response = new Response(Response.CODES.OK);
+    return res.status(response.code).send(response.create(docs));
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.all('/', onlySupportedMethods(['GET', 'POST', 'DELETE']));
 
 router.get('/:measureId', async(req, res, next) => {
   try {

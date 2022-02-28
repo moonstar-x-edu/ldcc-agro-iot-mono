@@ -76,7 +76,7 @@ class DeviceDatabase {
         logger.info(`(MONGO): Removed device ${id} from the device list for user ${user.id}`);
       }));
 
-      // Delete measures
+      await this.manager.measures.deleteForDevice(id);
 
       logger.info(`(MONGO): Deleted device with ID ${doc.id}`);
       return doc;
