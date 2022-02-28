@@ -4,9 +4,12 @@ const Response = require('../classes/Response');
 const Device = require('../classes/models/Device');
 const { onlySupportedMethods } = require('../middleware');
 const { InvalidBodyError } = require('../errors');
+const measuresRouter = require('./measures');
 
 const router = new express.Router();
 router.use(bodyParser.json());
+
+router.use('/:deviceId/measures', measuresRouter);
 
 router.get('/', async(req, res) => {
   const { devices: db } = req.app.get('mongo');
