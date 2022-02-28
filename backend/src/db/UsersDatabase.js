@@ -96,6 +96,14 @@ class UsersDatabase {
       throw error;
     }
   }
+
+  async getDevicesForUser(id) {
+    const user = await this.get(id);
+
+    return Promise.all(user.devices.map((deviceId) => {
+      return this.manager.devices.get(deviceId);
+    }));
+  }
 }
 
 module.exports = UsersDatabase;

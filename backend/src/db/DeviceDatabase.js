@@ -68,6 +68,8 @@ class DeviceDatabase {
         throw new ResourceNotFoundError(`Device ${id} does not exist.`);
       }
 
+      // Delete device from users that have access to it.
+
       logger.info(`(MONGO): Deleted device with ID ${doc.id}`);
       return doc;
     } catch (error) {

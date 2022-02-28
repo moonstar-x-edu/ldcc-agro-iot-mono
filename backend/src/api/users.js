@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const Response = require('../classes/Response');
 const User = require('../classes/models/User');
 const { onlySupportedMethods } = require('../middleware');
-const { InvalidBodyError } = require('../errors');
+const { InvalidBodyError, ResourceForbiddenError } = require('../errors');
 
 const router = new express.Router();
 router.use(bodyParser.json());
@@ -87,12 +87,45 @@ router.patch('/:id', async(req, res, next) => {
 
 router.all('/:id', onlySupportedMethods(['GET', 'DELETE', 'PATCH']));
 
-/* TODO: GET /:userId/devices */
+router.get('/:userId/devices', async(req, res, next) => {
+  const { userId } = req.params;
+  const { users: db } = req.app.get('mongo');
+
+  try {
+    const docs = await db.getDevicesForUser(userId);
+
+    const response = new Response(Response.CODES.OK);
+    return res.status(response.code).send(response.create(docs));
+  } catch (error) {
+    next(error);
+  }
+});
+
 /* TODO: POST /:userId/devices */
 
 router.all('/:userId/devices', onlySupportedMethods(['GET', 'POST']));
 
-/* TODO: GET /:userId/devices/:deviceId */
+router.get('/:userId/devices/:deviceId', async(req, res, next) => {
+  const { userId, deviceId } = req.params;
+  const { users: usersDB, devices: devicesDB } = req.app.get('mongo');
+
+  try {
+    const user = await usersDB.get(userId);
+    const device = await devicesDB.get(deviceId);
+
+    const userHasDevice = user.devices.some((id) => id === deviceId);
+
+    if (!userHasDevice) {
+      throw new ResourceForbiddenError(`User ${userId} does not have access to device ${deviceId}`);
+    }
+
+    const response = new Response(Response.CODES.OK);
+    return res.status(response.code).send(response.create(device));
+  } catch (error) {
+    next(error);
+  }
+});
+
 /* TODO: DELETE /:userId/devices/:deviceId */
 
 router.all('/:userId/devices/:deviceId', onlySupportedMethods(['GET', 'DELETE']));

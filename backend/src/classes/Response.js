@@ -16,6 +16,7 @@ class Response {
         break;
 
       case Response.CODES.BAD_REQUEST:
+      case Response.CODES.FORBIDDEN:
       case Response.CODES.NOT_FOUND:
       case Response.CODES.INTERNAL_SERVER_ERROR:
         this._failedOperation(Response.DEFAULT_MESSAGES[this.code], content);
@@ -50,6 +51,7 @@ Response.CODES = {
   OK: 200,
   CREATED: 201,
   BAD_REQUEST: 400,
+  FORBIDDEN: 403,
   NOT_FOUND: 404,
   METHOD_NOT_ALLOWED: 405,
   INTERNAL_SERVER_ERROR: 500
@@ -57,6 +59,7 @@ Response.CODES = {
 
 Response.DEFAULT_MESSAGES = {
   [Response.CODES.BAD_REQUEST]: "The server couldn't process your request.",
+  [Response.CODES.FORBIDDEN]: 'You do not have access to the requested resource.',
   [Response.CODES.NOT_FOUND]: 'The requested resource was not found. Please check that the endpoint is written correctly.',
   [Response.CODES.METHOD_NOT_ALLOWED]: 'This method is not allowed on this endpoint.',
   [Response.CODES.INTERNAL_SERVER_ERROR]: 'Something went wrong when accessing the requested resource.',
