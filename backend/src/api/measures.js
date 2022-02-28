@@ -43,8 +43,33 @@ router.post('/', async(req, res, next) => {
 
 router.all('/', onlySupportedMethods(['GET', 'POST']));
 
-/* TODO: GET /:id */
-/* TODO: DELETE /:id */
+router.get('/:measureId', async(req, res, next) => {
+  try {
+    const { deviceId, measureId } = req.params;
+    const { measures: db } = req.app.get('mongo');
+
+    const doc = await db.get(deviceId, measureId);
+
+    const response = new Response(Response.CODES.OK);
+    return res.status(response.code).send(response.create(doc));
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete('/:measureId', async(req, res, next) => {
+  try {
+    const { deviceId, measureId } = req.params;
+    const { measures: db } = req.app.get('mongo');
+
+    const doc = await db.delete(deviceId, measureId);
+
+    const response = new Response(Response.CODES.OK);
+    return res.status(response.code).send(response.create(doc));
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.all('/:measureId', onlySupportedMethods(['GET', 'DELETE']));
 

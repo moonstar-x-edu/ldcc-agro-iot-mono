@@ -25,18 +25,22 @@ class MeasureDatabase {
     }
   }
 
-  async get(id) {
+  async get(deviceId, measureId) {
     try {
-      const doc = await this.MeasureModel.findById(id);
+      const doc = await this.MeasureModel.findById(measureId);
 
       if (!doc) {
-        throw new ResourceNotFoundError(`Measure ${id} does not exist.`);
+        throw new ResourceNotFoundError(`Measure ${measureId} does not exist.`);
+      }
+
+      if (doc.deviceId.toString() !== deviceId) {
+        throw new ResourceNotFoundError(`Measure ${measureId} does not exist for device ${deviceId}.`);
       }
 
       return doc;
     } catch (error) {
       if (error instanceof CastError) {
-        throw new ResourceNotFoundError(`Measure ${id} does not exist.`);
+        throw new ResourceNotFoundError(`Measure ${measureId} does not exist.`);
       }
 
       throw error;
@@ -65,19 +69,20 @@ class MeasureDatabase {
     }
   }
 
-  async delete(id) {
+  async delete(deviceId, measureId) {
     try {
-      const doc = await this.MeasureModel.findByIdAndDelete(id);
+      await this.get(deviceId, measureId);
+      const doc = await this.MeasureModel.findByIdAndDelete(measureId);
 
       if (!doc) {
-        throw new ResourceNotFoundError(`Measure ${id} does not exist.`);
+        throw new ResourceNotFoundError(`Measure ${measureId} does not exist.`);
       }
 
-      logger.info(`(MONGO): Deleted measure with ID ${doc.id} for device ${doc.deviceId}`);
+      logger.info(`(MONGO): Deleted measure with ID ${measureId} for device ${deviceId}`);
       return doc;
     } catch (error) {
       if (error instanceof CastError) {
-        throw new ResourceNotFoundError(`Measure ${id} does not exist.`);
+        throw new ResourceNotFoundError(`Measure ${measureId} does not exist.`);
       }
 
       throw error;
