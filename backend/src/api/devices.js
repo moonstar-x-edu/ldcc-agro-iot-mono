@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const Response = require('../classes/Response');
-const User = require('../classes/models/User');
+const Device = require('../classes/models/Device');
 const { onlySupportedMethods } = require('../middleware');
 const { InvalidBodyError } = require('../errors');
 
@@ -9,7 +9,7 @@ const router = new express.Router();
 router.use(bodyParser.json());
 
 router.get('/', async(req, res) => {
-  const { users: db } = req.app.get('mongo');
+  const { devices: db } = req.app.get('mongo');
 
   const docs = await db.getAll();
 
@@ -19,15 +19,15 @@ router.get('/', async(req, res) => {
 
 router.post('/', async(req, res, next) => {
   const { body } = req;
-  const { users: db } = req.app.get('mongo');
+  const { devices: db } = req.app.get('mongo');
 
   try {
     if (!body || Object.keys(body).length < 1) {
       throw new InvalidBodyError(Response.DEFAULT_MESSAGES.MISSING_JSON_BODY);
     }
 
-    const user = User.from(body);
-    const doc = await db.create(user);
+    const device = Device.from(body);
+    const doc = await db.create(device);
 
     const response = new Response(Response.CODES.CREATED);
     return res.status(response.code).send(response.create(doc));
@@ -40,7 +40,7 @@ router.all('/', onlySupportedMethods(['GET', 'POST']));
 
 router.get('/:id', async(req, res, next) => {
   const { id } = req.params;
-  const { users: db } = req.app.get('mongo');
+  const { devices: db } = req.app.get('mongo');
 
   try {
     const doc = await db.get(id);
@@ -54,7 +54,7 @@ router.get('/:id', async(req, res, next) => {
 
 router.delete('/:id', async(req, res, next) => {
   const { id } = req.params;
-  const { users: db } = req.app.get('mongo');
+  const { devices: db } = req.app.get('mongo');
 
   try {
     const doc = await db.delete(id);
@@ -68,15 +68,15 @@ router.delete('/:id', async(req, res, next) => {
 
 router.patch('/:id', async(req, res, next) => {
   const { body, params: { id } } = req;
-  const { users: db } = req.app.get('mongo');
+  const { devices: db } = req.app.get('mongo');
 
   try {
     if (!body || Object.keys(body).length < 1) {
       throw new InvalidBodyError(Response.DEFAULT_MESSAGES.MISSING_JSON_BODY);
     }
 
-    const user = User.from(body, false);
-    const doc = await db.update(id, user);
+    const device = Device.from(body, false);
+    const doc = await db.update(id, device);
 
     const response = new Response(Response.CODES.OK);
     return res.status(response.code).send(response.create(doc));
@@ -86,15 +86,5 @@ router.patch('/:id', async(req, res, next) => {
 });
 
 router.all('/:id', onlySupportedMethods(['GET', 'DELETE', 'PATCH']));
-
-/* TODO: GET /:userId/devices */
-/* TODO: POST /:userId/devices */
-
-router.all('/:userId/devices', onlySupportedMethods(['GET', 'POST']));
-
-/* TODO: GET /:userId/devices/:deviceId */
-/* TODO: DELETE /:userId/devices/:deviceId */
-
-router.all('/:userId/devices/:deviceId', onlySupportedMethods(['GET', 'DELETE']));
 
 module.exports = router;
