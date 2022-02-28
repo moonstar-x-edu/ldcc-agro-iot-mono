@@ -16,6 +16,7 @@ class Response {
         break;
 
       case Response.CODES.BAD_REQUEST:
+      case Response.CODES.UNAUTHORIZED:
       case Response.CODES.FORBIDDEN:
       case Response.CODES.NOT_FOUND:
       case Response.CODES.INTERNAL_SERVER_ERROR:
@@ -51,6 +52,7 @@ Response.CODES = {
   OK: 200,
   CREATED: 201,
   BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
   FORBIDDEN: 403,
   NOT_FOUND: 404,
   METHOD_NOT_ALLOWED: 405,
@@ -59,6 +61,7 @@ Response.CODES = {
 
 Response.DEFAULT_MESSAGES = {
   [Response.CODES.BAD_REQUEST]: "The server couldn't process your request.",
+  [Response.CODES.UNAUTHORIZED]: 'You are not authorized to access this resource.',
   [Response.CODES.FORBIDDEN]: 'You do not have access to the requested resource.',
   [Response.CODES.NOT_FOUND]: 'The requested resource was not found. Please check that the endpoint is written correctly.',
   [Response.CODES.METHOD_NOT_ALLOWED]: 'This method is not allowed on this endpoint.',

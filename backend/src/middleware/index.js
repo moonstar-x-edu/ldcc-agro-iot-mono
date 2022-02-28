@@ -2,6 +2,7 @@
 const logger = require('@greencoast/logger');
 const onFinished = require('on-finished');
 const Response = require('../classes/Response');
+const { UnauthorizedRequestError } = require('../errors');
 
 const onlySupportedMethods = (methods) => {
   return (_, res) => {
@@ -38,8 +39,21 @@ const logRequests = (req, res, next) => {
   next();
 };
 
+const basicAuth = (req, res, next) => {
+  if (!req.headers.authorization) {
+    throw new UnauthorizedRequestError('You need to provide a Bearer token in the Authorization header.');
+  }
+
+  if (req.headers.authorization !== `Bearer ${process.env.BASIC_TOKEN}`) {
+    throw new UnauthorizedRequestError('Invalid Bearer token supplied.');
+  }
+
+  next();
+};
+
 module.exports = {
   onlySupportedMethods,
   handleError,
-  logRequests
+  logRequests,
+  basicAuth
 };
