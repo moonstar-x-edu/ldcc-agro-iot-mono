@@ -10,7 +10,7 @@ router.use(basicAuth);
 router.use('/users', usersRouter);
 router.use('/devices', devicesRouter);
 
-router.all('*', (req, res) => {
+router.all('*', () => {
   throw new ResourceNotFoundError('This route is not handled by the server.');
 });
 

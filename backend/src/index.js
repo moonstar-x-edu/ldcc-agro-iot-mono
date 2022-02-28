@@ -34,7 +34,7 @@ app.get('*', (req, res) => {
   res.sendFile(WEBAPP_INDEX);
 });
 
-app.all('*', (req, res) => {
+app.all('*', () => {
   throw new ResourceNotFoundError('This route is not handled by the server.');
 });
 

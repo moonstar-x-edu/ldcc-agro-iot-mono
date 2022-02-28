@@ -43,7 +43,7 @@ class UsersDatabase {
     const model = this.UserModel(user.data);
 
     try {
-      const doc = (await model.save()).toJSON()
+      const doc = (await model.save()).toJSON();
       logger.info(`(MONGO): Created new user with ID ${doc.id}`);
       return doc;
     } catch (error) {
