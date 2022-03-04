@@ -1,0 +1,11 @@
+.navbar {
+  background-color: $navbar-bg;
+
+  .brand-logo {
+    width: 2rem;
+    height: 2rem;
+    margin-right: $std-margin-half;
+    vertical-align: text-bottom;
+    display: inline-block;
+  }
+}

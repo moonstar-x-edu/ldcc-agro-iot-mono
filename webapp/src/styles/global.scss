@@ -1,0 +1,32 @@
+/* Globals */
+
+html body {
+  height: 100%;
+  background-color: $site-bg;
+  font-family: 'Roboto', sans-serif;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: $site-bg;
+}
+
+.site-content {
+  flex: 1;
+}
+
+/* General Styles */
+
+.link {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+button.btn.custom-button {
+  @include add-custom-button-styles();
+}
