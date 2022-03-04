@@ -1,3 +1,6 @@
 {
-  "extends": "greencoast"
+  "extends": "greencoast",
+  "rules": {
+    "react/jsx-no-bind": "off"
+  }
 }
