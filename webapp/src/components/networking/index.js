@@ -19,3 +19,19 @@ export const getUser = async(id) => {
     throw error.response?.data.error || error.response?.data.message || error.message;
   }
 };
+
+export const getDevicesForUser = async(userId) => {
+  try {
+    return (await client.get(`users/${userId}/devices`)).data.data;
+  } catch (error) {
+    throw error.response?.data.error || error.response?.data.message || error.message;
+  }
+};
+
+export const getMeasuresForDevice = async(deviceId) => {
+  try {
+    return (await client.get(`devices/${deviceId}/measures`)).data.data;
+  } catch (error) {
+    throw error.response?.data.error || error.response?.data.message || error.message;
+  }
+};
