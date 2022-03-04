@@ -1,0 +1,7 @@
+.device-picker {
+  width: 100%;
+
+  button {
+    @include add-custom-button-styles();
+  }
+}

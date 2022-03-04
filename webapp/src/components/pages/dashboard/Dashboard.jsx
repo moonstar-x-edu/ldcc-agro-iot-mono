@@ -5,6 +5,7 @@ import UserContext from '../../context/UserContext';
 import DevicesContext from '../../context/DevicesContext';
 import AlertBox from '../../common/alertBox';
 import LoadingSpinner from '../../common/loadingSpinner';
+import DevicePicker from '../../common/devicePicker';
 import { PAGES } from '../../../constants';
 import { updatePageTitle } from '../../../utils/page';
 import { getDevicesForUser } from '../../networking/api';
@@ -16,7 +17,8 @@ const Dashboard = () => {
     devices, setDevices,
     fetchError: devicesFetchError, setFetchError: setDevicesFetchError,
     loading: devicesLoading, setLoading: setDevicesLoading,
-    shouldFetch: devicesShouldFetch, setShouldFetch: setDevicesShouldFetch
+    shouldFetch: devicesShouldFetch, setShouldFetch: setDevicesShouldFetch,
+    setCurrent: setCurrentDevice
   } = useContext(DevicesContext);
 
   useEffect(() => {
@@ -51,6 +53,10 @@ const Dashboard = () => {
     user
   ]);
 
+  const handleDeviceSelect = (device) => {
+    setCurrentDevice(device);
+  };
+
   if (devicesFetchError) {
     return (
       <Container>
@@ -59,7 +65,7 @@ const Dashboard = () => {
     );
   }
 
-  if (devicesLoading) {
+  if (devicesLoading || !devices) {
     return (
       <LoadingSpinner loading color="custom" />
     );
@@ -67,7 +73,11 @@ const Dashboard = () => {
 
   return (
     <Container>
-      Dashboard
+      <h1>
+        Dashboard
+      </h1>
+      <hr />
+      <DevicePicker devices={devices} onSelect={handleDeviceSelect} />
     </Container>
   );
 };

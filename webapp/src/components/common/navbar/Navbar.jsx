@@ -20,7 +20,7 @@ const Navbar = () => {
   };
 
   return (
-    <BSNavbar expand={false} variant="dark">
+    <BSNavbar expand={false} variant="dark" className="mb-4">
       <Container className="mw-100 mx-2">
         <BSNavbar.Toggle onClick={handleOpen} />
         <Nav className="mx-4">

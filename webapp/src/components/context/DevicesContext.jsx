@@ -8,12 +8,14 @@ const DevicesContextProvider = ({ children }) => {
   const [fetchError, setFetchError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [shouldFetch, setShouldFetch] = useState(true);
+  const [current, setCurrent] = useState(null);
 
   const context = {
     devices, setDevices,
     fetchError, setFetchError,
     loading, setLoading,
-    shouldFetch, setShouldFetch
+    shouldFetch, setShouldFetch,
+    current, setCurrent
   };
 
   return (
