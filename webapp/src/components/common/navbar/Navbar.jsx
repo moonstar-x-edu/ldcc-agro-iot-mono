@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Navbar as BSNavbar, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import AppContext from '../../context/AppContext';
-import { ROUTES } from '../../../constants';
+import { ROUTES, PAGES } from '../../../constants';
 
 const Navbar = () => {
   const { active } = useContext(AppContext);
@@ -16,7 +16,7 @@ const Navbar = () => {
       <BSNavbar.Collapse expand="lg" id="responsive-sidebar">
         <Nav fill className="mr-auto">
           <Nav.Item>
-            <Nav.Link as={Link} to={ROUTES.dashboard} active={active === ROUTES.dashboard} eventKey={ROUTES.dashboard}>
+            <Nav.Link as={Link} to={ROUTES.dashboard} active={active === PAGES.dashboard} eventKey={PAGES.dashboard}>
               Dashboard
             </Nav.Link>
           </Nav.Item>
