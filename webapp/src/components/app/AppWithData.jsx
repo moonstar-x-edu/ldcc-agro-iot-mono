@@ -1,6 +1,9 @@
 import React, { useContext, useEffect } from 'react';
+import { Container } from 'react-bootstrap';
 import UserContext from '../context/UserContext';
 import Router from '../router';
+import AlertBox from '../common/alertBox';
+import LoadingSpinner from '../common/loadingSpinner';
 import { getUser } from '../networking';
 
 // Hardcoded since it's just a prototype. No login available.
@@ -46,6 +49,20 @@ const AppWithData = () => {
     userShouldFetch,
     setUserShouldFetch
   ]);
+
+  if (userFetchError) {
+    return (
+      <Container>
+        <AlertBox color="red" title="Algo sucedió al descargar la información del usuario." text={[userFetchError]} />
+      </Container>
+    );
+  }
+
+  if (userLoading) {
+    return (
+      <LoadingSpinner loading color="custom" />
+    );
+  }
 
   return (
     <Router />
