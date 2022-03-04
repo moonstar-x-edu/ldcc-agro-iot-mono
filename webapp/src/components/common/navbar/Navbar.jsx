@@ -51,6 +51,7 @@ const Navbar = () => {
                   active={active === PAGES.dashboard}
                   eventKey={PAGES.dashboard}
                   className="link"
+                  onClick={handleClose}
                 >
                   <i className="fa-solid fa-gauge " /> Dashboard
                 </Nav.Link>
