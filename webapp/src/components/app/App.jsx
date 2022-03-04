@@ -1,11 +1,14 @@
 import React from 'react';
 import { AppContextProvider } from '../context/AppContext';
-import Router from '../router';
+import { UserContextProvider } from '../context/UserContext';
+import AppWithData from './AppWithData';
 
 const App = () => {
   return (
     <AppContextProvider>
-      <Router />
+      <UserContextProvider>
+        <AppWithData />
+      </UserContextProvider>
     </AppContextProvider>
   );
 };
