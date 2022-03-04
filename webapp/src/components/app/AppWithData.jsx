@@ -13,14 +13,10 @@ const USER_ID = process.env.NODE_ENV === 'development' ?
 
 const AppWithData = () => {
   const {
-    user,
-    setUser,
-    fetchError: userFetchError,
-    setFetchError: setUserFetchError,
-    loading: userLoading,
-    setLoading: setUserLoading,
-    shouldFetch: userShouldFetch,
-    setShouldFetch: setUserShouldFetch
+    user, setUser,
+    fetchError: userFetchError, setFetchError: setUserFetchError,
+    loading: userLoading, setLoading: setUserLoading,
+    shouldFetch: userShouldFetch, setShouldFetch: setUserShouldFetch
   } = useContext(UserContext);
 
   useEffect(() => {
