@@ -8,6 +8,7 @@ import AlertBox from '../../common/alertBox';
 import LoadingSpinner from '../../common/loadingSpinner';
 import DevicePicker from '../../common/devicePicker';
 import TemperatureChart from '../../common/charts/TemperatureChart';
+import HumidityChart from '../../common/charts/HumidityChart';
 import { PAGES } from '../../../constants';
 import { updatePageTitle } from '../../../utils/page';
 import { getDevicesForUser, getMeasuresForDevice } from '../../networking/api';
@@ -118,6 +119,7 @@ const Dashboard = () => {
       <hr />
       <DevicePicker devices={devices} onSelect={handleDeviceSelect} />
       <TemperatureChart measures={measures} device={currentDevice} />
+      <HumidityChart measures={measures} device={currentDevice} />
     </Container>
   );
 };

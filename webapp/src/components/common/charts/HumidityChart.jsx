@@ -11,7 +11,7 @@ import {
   Legend
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { TEMPERATURE_VALUES } from '../../../constants';
+import { HUMIDITY_VALUES } from '../../../constants';
 
 ChartJS.register(
   CategoryScale,
@@ -26,11 +26,11 @@ ChartJS.register(
 const getPointColor = (context) => {
   const value = context.raw;
 
-  if (value < TEMPERATURE_VALUES.MIN_SAFE) {
+  if (value < HUMIDITY_VALUES.MIN_SAFE) {
     return 'blue';
   }
 
-  if (value > TEMPERATURE_VALUES.MAX_SAFE) {
+  if (value > HUMIDITY_VALUES.MAX_SAFE) {
     return 'red';
   }
 
@@ -41,14 +41,14 @@ const parseMeasures = (measures) => {
   return {
     labels: measures.map((_, idx) => idx + 1),
     datasets: [{
-      label: 'Temperatura en ºC',
-      data: measures.map((m) => m.temperature),
+      label: 'Humedad en %',
+      data: measures.map((m) => m.humidity * 100),
       fill: false
     }]
   };
 };
 
-const TemperatureChart = ({ measures, device }) => {
+const HumidityChart = ({ measures, device }) => {
   if (!measures || !device) {
     return null;
   }
@@ -59,7 +59,7 @@ const TemperatureChart = ({ measures, device }) => {
     plugins: {
       title: {
         display: true,
-        text: `Temperatura de ${device.name}`,
+        text: `Humedad de ${device.name}`,
         font: {
           size: 18
         }
@@ -71,7 +71,7 @@ const TemperatureChart = ({ measures, device }) => {
     scales: {
       yAxis: {
         ticks: {
-          callback: (t) => `${t}ºC`
+          callback: (t) => `${t}%`
         }
       },
       xAxis: {
@@ -93,7 +93,7 @@ const TemperatureChart = ({ measures, device }) => {
     }
   };
 
-  const id = `${device.id}-temperature`;
+  const id = `${device.id}-humidity`;
 
   return (
     <div className="line-chart">
@@ -110,7 +110,7 @@ const TemperatureChart = ({ measures, device }) => {
   );
 };
 
-TemperatureChart.propTypes = {
+HumidityChart.propTypes = {
   measures: PropTypes.arrayOf(PropTypes.shape({
     temperature: PropTypes.number
   })),
@@ -120,9 +120,9 @@ TemperatureChart.propTypes = {
   })
 };
 
-TemperatureChart.defaultProps = {
+HumidityChart.defaultProps = {
   measures: null,
   device: null
 };
 
-export default TemperatureChart;
+export default HumidityChart;
