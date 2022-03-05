@@ -54,7 +54,7 @@ const HumidityChart = ({ measures, device }) => {
   }
 
   const options = {
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     responsive: true,
     plugins: {
       title: {
