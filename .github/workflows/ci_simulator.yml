@@ -1,0 +1,36 @@
+name: CI (Simulator)
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - simulator/**
+  pull_request:
+    branches: [master]
+    paths:
+      - simulator/**
+  workflow_dispatch:
+
+jobs:
+  test:
+    defaults:
+      run:
+        working-directory: ./simulator
+
+    name: Run Tests (Backend)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.6.1
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Linter
+        run: npm run lint

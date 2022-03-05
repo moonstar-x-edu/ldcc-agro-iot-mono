@@ -4,7 +4,9 @@
   "description": "Device simulator for an agriculture IoT project.",
   "main": "./src/index.js",
   "scripts": {
-    "start": "node ./src/index.js"
+    "start": "node ./src/index.js",
+    "lint:errors-only": "eslint src --quiet",
+    "lint": "eslint src"
   },
   "engines": {
     "node": ">=16.6"
