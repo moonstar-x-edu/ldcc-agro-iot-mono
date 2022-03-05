@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from '../common/navbar';
+import Footer from '../common/footer';
 import Dashboard from '../pages/dashboard';
 import NotFound from '../pages/notFound';
 import { ROUTES } from '../../constants';
@@ -14,6 +15,7 @@ const Router = () => {
         <Route exact path={ROUTES.dashboard} element={<Dashboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 };
