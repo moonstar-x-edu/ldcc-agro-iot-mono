@@ -1,10 +1,12 @@
 import React, { useContext, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
+import AppContext from '../context/AppContext';
 import UserContext from '../context/UserContext';
 import Router from '../router';
 import AlertBox from '../common/alertBox';
 import LoadingSpinner from '../common/loadingSpinner';
 import { getUser } from '../../networking/api';
+import { createSocket } from '../../networking/ws';
 
 // Hardcoded since it's just a prototype. No login available.
 const USER_ID = process.env.NODE_ENV === 'development' ?
@@ -18,6 +20,7 @@ const AppWithData = () => {
     loading: userLoading, setLoading: setUserLoading,
     shouldFetch: userShouldFetch, setShouldFetch: setUserShouldFetch
   } = useContext(UserContext);
+  const { setSocket } = useContext(AppContext);
 
   useEffect(() => {
     const fetchUser = async() => {
@@ -45,6 +48,12 @@ const AppWithData = () => {
     userShouldFetch,
     setUserShouldFetch
   ]);
+
+  useEffect(() => {
+    const s = createSocket();
+    setSocket(s);
+    return () => s.close();
+  }, [setSocket]);
 
   if (userFetchError) {
     return (
