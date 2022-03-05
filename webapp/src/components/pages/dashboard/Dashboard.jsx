@@ -11,7 +11,7 @@ import TemperatureChart from '../../common/charts/TemperatureChart';
 import HumidityChart from '../../common/charts/HumidityChart';
 import { PAGES } from '../../../constants';
 import { updatePageTitle } from '../../../utils/page';
-import { getDevicesForUser, getMeasuresForDevice } from '../../networking/api';
+import { getDevicesForUser, getMeasuresForDevice } from '../../../networking/api';
 
 const Dashboard = () => {
   const { setActive } = useContext(AppContext);

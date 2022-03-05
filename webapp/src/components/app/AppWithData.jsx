@@ -4,7 +4,7 @@ import UserContext from '../context/UserContext';
 import Router from '../router';
 import AlertBox from '../common/alertBox';
 import LoadingSpinner from '../common/loadingSpinner';
-import { getUser } from '../networking/api';
+import { getUser } from '../../networking/api';
 
 // Hardcoded since it's just a prototype. No login available.
 const USER_ID = process.env.NODE_ENV === 'development' ?
