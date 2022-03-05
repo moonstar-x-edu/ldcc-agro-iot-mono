@@ -1,3 +1,7 @@
 {
-  "extends": "greencoast"
+  "extends": "greencoast",
+  "rules": {
+    "react/jsx-no-bind": "off",
+    "jsx-a11y/click-events-have-key-events": "off"
+  }
 }

@@ -1,0 +1,41 @@
+/* Globals */
+
+html body {
+  height: 100%;
+  background-color: $site-bg;
+  font-family: 'Roboto', sans-serif;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: $site-bg;
+}
+
+.site-content {
+  flex: 1;
+}
+
+/* General Styles */
+
+.link {
+  color: $navbar-bg;
+  text-decoration: none;
+
+  &:hover {
+    color: $accent-dark;
+    text-decoration: none;
+  }
+}
+
+button.btn.custom-button {
+  @include add-custom-button-styles();
+}
+
+/* Icons */
+.icon-white {
+  &::before {
+    color: #fff;
+  }
+}

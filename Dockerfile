@@ -5,6 +5,11 @@ FROM node:16.6.1-alpine3.14 AS web-builder
 # ARG var
 # ENV VAR=$var
 
+ARG REACT_APP_API_TOKEN
+ENV REACT_APP_API_TOKEN=$REACT_APP_API_TOKEN
+
+ENV NODE_ENV=production
+
 WORKDIR /opt/webapp
 COPY webapp/package*.json ./
 RUN npm ci

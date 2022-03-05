@@ -1,0 +1,19 @@
+.navbar {
+  background-color: $navbar-bg;
+
+  .user-icon {
+    height: 2rem;
+    line-height: 2rem;
+  }
+}
+
+.offcanvas {
+
+  .back-button {
+    line-height: 4rem;
+    border: none;
+    background: none;
+    text-align: right;
+    margin-right: 2rem;
+  }
+}
