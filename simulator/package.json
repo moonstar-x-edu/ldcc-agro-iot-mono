@@ -19,6 +19,7 @@
     "eslint-config-greencoast": "^0.0.2"
   },
   "dependencies": {
+    "@faker-js/faker": "^6.0.0-alpha.7",
     "@greencoast/logger": "^1.1.0",
     "axios": "^0.26.0",
     "dotenv": "^16.0.0"
