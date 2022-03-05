@@ -1,5 +1,6 @@
 const { Server } = require('socket.io');
 const logger = require('@greencoast/logger');
+const Connection = require('./Connection');
 
 class WebSocketServer {
   constructor(httpServer) {
@@ -9,6 +10,7 @@ class WebSocketServer {
         methods: ['GET']
       }
     });
+    this.connections = new Map();
 
     this.initialize();
   }
@@ -16,11 +18,12 @@ class WebSocketServer {
   initialize() {
     this.io.on('connection', (socket) => {
       logger.log(`Received a connection: ${socket.id}`);
-
-      socket.on('disconnect', () => {
-        logger.log(`Closed connection: ${socket}`);
-      });
+      this.connections.set(socket.id, new Connection(this, socket));
     });
+  }
+
+  sendMeasure(measure) {
+    this.io.sockets.emit('measure', measure);
   }
 }
 
