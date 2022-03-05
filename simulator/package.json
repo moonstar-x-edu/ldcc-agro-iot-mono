@@ -1,0 +1,27 @@
+{
+  "name": "ldcc-agro-iot-simulator",
+  "version": "0.0.1",
+  "description": "Device simulator for an agriculture IoT project.",
+  "main": "./src/index.js",
+  "scripts": {
+    "start": "node ./src/index.js",
+    "lint:errors-only": "eslint src --quiet",
+    "lint": "eslint src"
+  },
+  "engines": {
+    "node": ">=16.6"
+  },
+  "keywords": [],
+  "author": "LDCC",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-greencoast": "^0.0.2"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^6.0.0-alpha.7",
+    "@greencoast/logger": "^1.1.0",
+    "axios": "^0.26.0",
+    "dotenv": "^16.0.0"
+  }
+}

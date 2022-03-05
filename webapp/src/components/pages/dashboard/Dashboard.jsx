@@ -6,15 +6,16 @@ import DevicesContext from '../../context/DevicesContext';
 import MeasuresContext from '../../context/MeasuresContext';
 import AlertBox from '../../common/alertBox';
 import LoadingSpinner from '../../common/loadingSpinner';
+import UserWelcome from '../../common/userWelcome';
 import DevicePicker from '../../common/devicePicker';
 import TemperatureChart from '../../common/charts/TemperatureChart';
 import HumidityChart from '../../common/charts/HumidityChart';
 import { PAGES } from '../../../constants';
 import { updatePageTitle } from '../../../utils/page';
-import { getDevicesForUser, getMeasuresForDevice } from '../../networking/api';
+import { getDevicesForUser, getMeasuresForDevice } from '../../../networking/api';
 
 const Dashboard = () => {
-  const { setActive } = useContext(AppContext);
+  const { setActive, socket } = useContext(AppContext);
   const { user } = useContext(UserContext);
   const {
     devices, setDevices,
@@ -24,7 +25,7 @@ const Dashboard = () => {
     current: currentDevice, setCurrent: setCurrentDevice
   } = useContext(DevicesContext);
   const {
-    measures, setMeasures,
+    measures, setMeasures, addMeasure,
     fetchError: measuresFetchError, setFetchError: setMeasuresFetchError,
     loading: measuresLoading, setLoading: setMeasuresLoading,
     shouldFetch: measuresShouldFetch, setShouldFetch: setMeasuresShouldFetch
@@ -84,9 +85,23 @@ const Dashboard = () => {
     setMeasuresFetchError
   ]);
 
+  useEffect(() => {
+    if (!socket) {
+      return;
+    }
+
+    socket.off('measure');
+    socket.on('measure', (measure) => {
+      if (measures && measure.deviceId === currentDevice?.id) {
+        addMeasure(measure);
+      }
+    });
+  }, [socket, currentDevice, addMeasure, measures]);
+
   const handleDeviceSelect = (device) => {
     setCurrentDevice(device);
     setMeasuresShouldFetch(true);
+    setMeasures([]);
   };
 
   if (devicesFetchError) {
@@ -105,7 +120,7 @@ const Dashboard = () => {
     );
   }
 
-  if (devicesLoading || measuresLoading || !devices) {
+  if (devicesLoading || measuresLoading || !devices || !socket) {
     return (
       <LoadingSpinner loading color="custom" />
     );
@@ -113,11 +128,12 @@ const Dashboard = () => {
 
   return (
     <Container>
+      <UserWelcome user={user} />
       <h1>
         Dashboard
       </h1>
       <hr />
-      <DevicePicker devices={devices} onSelect={handleDeviceSelect} />
+      <DevicePicker devices={devices} currentDevice={currentDevice} onSelect={handleDeviceSelect} />
       <TemperatureChart measures={measures} device={currentDevice} />
       <HumidityChart measures={measures} device={currentDevice} />
     </Container>

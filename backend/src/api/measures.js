@@ -25,6 +25,7 @@ router.get('/', async(req, res, next) => {
 router.post('/', async(req, res, next) => {
   const { body, params: { deviceId } } = req;
   const { measures: db } = req.app.get('mongo');
+  const ws = req.app.get('ws');
 
   try {
     if (!body || Object.keys(body).length < 1) {
@@ -33,6 +34,8 @@ router.post('/', async(req, res, next) => {
 
     const measure = Measure.from(body, deviceId);
     const doc = await db.createForDevice(deviceId, measure);
+
+    ws.sendMeasure(doc);
 
     const response = new Response(Response.CODES.CREATED);
     return res.status(response.code).send(response.create(doc));

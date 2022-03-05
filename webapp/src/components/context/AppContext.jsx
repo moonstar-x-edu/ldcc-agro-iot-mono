@@ -5,10 +5,11 @@ const AppContext = React.createContext(null);
 
 const AppContextProvider = ({ children }) => {
   const [active, setActive] = useState(null);
+  const [socket, setSocket] = useState(null);
 
   const context = {
-    active,
-    setActive
+    active, setActive,
+    socket, setSocket
   };
 
   return (

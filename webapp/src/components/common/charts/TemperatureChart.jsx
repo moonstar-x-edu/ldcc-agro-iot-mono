@@ -104,7 +104,7 @@ const TemperatureChart = ({ measures, device }) => {
         id={id}
         data={parseMeasures(measures)}
         options={options}
-        redraw
+        redraw={false}
       />
     </div>
   );

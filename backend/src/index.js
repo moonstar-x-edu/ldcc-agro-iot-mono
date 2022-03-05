@@ -1,11 +1,13 @@
 require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
+const { createServer } = require('http');
 const express = require('express');
 const cors = require('cors');
 const logger = require('@greencoast/logger');
 const apiRouter = require('./api');
 const MongoManager = require('./db/MongoManager');
+const WebSocketServer = require('./ws/WebSocketServer');
 const { logRequests, handleError } = require('./middleware');
 const { ResourceNotFoundError } = require('./errors');
 
@@ -19,10 +21,12 @@ if (!fs.existsSync(WEBAPP_DIR)) {
 const WEBAPP_INDEX = path.join(WEBAPP_DIR, './index.html');
 
 const app = express();
+const httpServer = createServer(app);
 app.use(cors());
 app.use(logRequests);
 
 app.set('mongo', new MongoManager(process.env.MONGODB_URI));
+app.set('ws', new WebSocketServer(httpServer));
 
 app.options('*', cors());
 
@@ -40,6 +44,6 @@ app.all('*', () => {
 
 app.use(handleError);
 
-app.listen(HTTP_PORT, () => {
+httpServer.listen(HTTP_PORT, () => {
   logger.info(`API listening on port: ${HTTP_PORT}`);
 });
