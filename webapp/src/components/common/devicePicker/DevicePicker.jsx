@@ -13,7 +13,7 @@ const DevicePicker = ({ devices, onSelect, className }) => {
 
   const handleSelect = (selected) => {
     setCurrent(selected);
-    onSelect(selected);
+    onSelect(devices.find((d) => d.id === selected));
   };
 
   return (

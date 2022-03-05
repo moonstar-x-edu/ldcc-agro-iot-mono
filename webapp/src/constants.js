@@ -18,3 +18,8 @@ export const BS_COLOR_VARIANTS = {
   black: 'dark',
   custom: null
 };
+
+export const TEMPERATURE_VALUES = {
+  MAX_SAFE: 35,
+  MIN_SAFE: 10
+};

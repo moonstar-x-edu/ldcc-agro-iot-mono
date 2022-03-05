@@ -3,12 +3,14 @@ import { Container } from 'react-bootstrap';
 import AppContext from '../../context/AppContext';
 import UserContext from '../../context/UserContext';
 import DevicesContext from '../../context/DevicesContext';
+import MeasuresContext from '../../context/MeasuresContext';
 import AlertBox from '../../common/alertBox';
 import LoadingSpinner from '../../common/loadingSpinner';
 import DevicePicker from '../../common/devicePicker';
+import TemperatureChart from '../../common/charts/TemperatureChart';
 import { PAGES } from '../../../constants';
 import { updatePageTitle } from '../../../utils/page';
-import { getDevicesForUser } from '../../networking/api';
+import { getDevicesForUser, getMeasuresForDevice } from '../../networking/api';
 
 const Dashboard = () => {
   const { setActive } = useContext(AppContext);
@@ -18,8 +20,14 @@ const Dashboard = () => {
     fetchError: devicesFetchError, setFetchError: setDevicesFetchError,
     loading: devicesLoading, setLoading: setDevicesLoading,
     shouldFetch: devicesShouldFetch, setShouldFetch: setDevicesShouldFetch,
-    setCurrent: setCurrentDevice
+    current: currentDevice, setCurrent: setCurrentDevice
   } = useContext(DevicesContext);
+  const {
+    measures, setMeasures,
+    fetchError: measuresFetchError, setFetchError: setMeasuresFetchError,
+    loading: measuresLoading, setLoading: setMeasuresLoading,
+    shouldFetch: measuresShouldFetch, setShouldFetch: setMeasuresShouldFetch
+  } = useContext(MeasuresContext);
 
   useEffect(() => {
     const fetchDevices = async() => {
@@ -37,9 +45,25 @@ const Dashboard = () => {
       }
     };
 
+    const fetchMeasures = async() => {
+      if (measuresShouldFetch && currentDevice) {
+        setMeasuresLoading(true);
+        setMeasuresShouldFetch(false);
+
+        try {
+          setMeasures(await getMeasuresForDevice(currentDevice.id));
+          setMeasuresLoading(false);
+        } catch (error) {
+          setMeasuresFetchError(error);
+          setMeasuresLoading(false);
+        }
+      }
+    };
+
     setActive(PAGES.dashboard);
     updatePageTitle('Dashboard');
     fetchDevices();
+    fetchMeasures();
   }, [
     devices,
     setDevices,
@@ -50,11 +74,18 @@ const Dashboard = () => {
     devicesShouldFetch,
     setDevicesShouldFetch,
     setActive,
-    user
+    user,
+    measuresShouldFetch,
+    setMeasuresShouldFetch,
+    currentDevice,
+    setMeasuresLoading,
+    setMeasures,
+    setMeasuresFetchError
   ]);
 
   const handleDeviceSelect = (device) => {
     setCurrentDevice(device);
+    setMeasuresShouldFetch(true);
   };
 
   if (devicesFetchError) {
@@ -65,7 +96,15 @@ const Dashboard = () => {
     );
   }
 
-  if (devicesLoading || !devices) {
+  if (measuresFetchError) {
+    return (
+      <Container>
+        <AlertBox color="red" title="Algo sucedió al descargar las medidas del device seleccionado." text={[measuresFetchError]} />
+      </Container>
+    );
+  }
+
+  if (devicesLoading || measuresLoading || !devices) {
     return (
       <LoadingSpinner loading color="custom" />
     );
@@ -78,6 +117,7 @@ const Dashboard = () => {
       </h1>
       <hr />
       <DevicePicker devices={devices} onSelect={handleDeviceSelect} />
+      <TemperatureChart measures={measures} device={currentDevice} />
     </Container>
   );
 };
