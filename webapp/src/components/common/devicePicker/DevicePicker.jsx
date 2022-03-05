@@ -3,16 +3,14 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownButton, ButtonGroup, FormControl } from 'react-bootstrap';
 
-const DevicePicker = ({ devices, onSelect, className }) => {
+const DevicePicker = ({ devices, currentDevice, onSelect, className }) => {
   const [filtered, setFiltered] = useState('');
-  const [current, setCurrent] = useState(null);
 
   const handleFilter = ({ target: { value } }) => {
     setFiltered(value);
   };
 
   const handleSelect = (selected) => {
-    setCurrent(selected);
     onSelect(devices.find((d) => d.id === selected));
   };
 
@@ -29,9 +27,9 @@ const DevicePicker = ({ devices, onSelect, className }) => {
       <FormControl className="mx-3 my-2 w-auto" placeholder="Buscar" onChange={handleFilter} value={filtered} />
       {
         devices
-          .filter(({ name, id }) => name.toLowerCase().includes(filtered.toLowerCase()))
+          .filter(({ name }) => name.toLowerCase().includes(filtered.toLowerCase()))
           .map(({ id, name }) => (
-            <Dropdown.Item key={id} eventKey={id} disabled={current === id}>
+            <Dropdown.Item key={id} eventKey={id} disabled={currentDevice?.id === id}>
               {name}
             </Dropdown.Item>
           ))
@@ -42,14 +40,19 @@ const DevicePicker = ({ devices, onSelect, className }) => {
 
 DevicePicker.propTypes = {
   devices: PropTypes.arrayOf(PropTypes.shape({
-
+    id: PropTypes.string,
+    name: PropTypes.string
   })),
+  currentDevice: PropTypes.shape({
+    id: PropTypes.string
+  }),
   onSelect: PropTypes.func,
   className: PropTypes.string
 };
 
 DevicePicker.defaultProps = {
   devices: [],
+  currentDevice: null,
   onSelect: () => null,
   className: ''
 };
