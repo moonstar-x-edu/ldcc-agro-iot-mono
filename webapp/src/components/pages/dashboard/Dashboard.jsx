@@ -6,6 +6,7 @@ import DevicesContext from '../../context/DevicesContext';
 import MeasuresContext from '../../context/MeasuresContext';
 import AlertBox from '../../common/alertBox';
 import LoadingSpinner from '../../common/loadingSpinner';
+import UserWelcome from '../../common/userWelcome';
 import DevicePicker from '../../common/devicePicker';
 import TemperatureChart from '../../common/charts/TemperatureChart';
 import HumidityChart from '../../common/charts/HumidityChart';
@@ -127,6 +128,7 @@ const Dashboard = () => {
 
   return (
     <Container>
+      <UserWelcome user={user} />
       <h1>
         Dashboard
       </h1>
