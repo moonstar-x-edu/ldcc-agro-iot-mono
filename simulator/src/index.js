@@ -15,8 +15,8 @@ const setup = async() => {
 };
 
 const loop = async() => {
-  const temperature = faker.datatype.number({ min: -50, max: 150, precision: 0.01 });
-  const humidity = faker.datatype.number({ min: 0, max: 1, precision: 0.01 });
+  const temperature = faker.datatype.number({ min: 18, max: 30, precision: 0.01 });
+  const humidity = faker.datatype.number({ min: 0.6, max: 0.8, precision: 0.01 });
 
   const measure = await client.postMeasure({ temperature, humidity });
   logger.info(`Posted measure with temperature ${measure.temperature} and humidity ${measure.humidity}`);

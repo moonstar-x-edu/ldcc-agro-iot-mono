@@ -12,6 +12,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { HUMIDITY_VALUES } from '../../../constants';
+import { getLastElementsOfArray } from '../../../utils/array';
 
 ChartJS.register(
   CategoryScale,
@@ -48,7 +49,7 @@ const parseMeasures = (measures) => {
   };
 };
 
-const HumidityChart = ({ measures, device }) => {
+const HumidityChart = ({ measures, device, maxValues }) => {
   if (!measures || !device) {
     return null;
   }
@@ -102,7 +103,7 @@ const HumidityChart = ({ measures, device }) => {
         key={id}
         datasetIdKey={id}
         id={id}
-        data={parseMeasures(measures)}
+        data={parseMeasures(getLastElementsOfArray(measures, maxValues))}
         options={options}
         redraw={false}
       />
@@ -117,12 +118,14 @@ HumidityChart.propTypes = {
   device: PropTypes.shape({
     name: PropTypes.string,
     id: PropTypes.string
-  })
+  }),
+  maxValues: PropTypes.number
 };
 
 HumidityChart.defaultProps = {
   measures: null,
-  device: null
+  device: null,
+  maxValues: 30
 };
 
 export default HumidityChart;

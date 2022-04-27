@@ -12,6 +12,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { TEMPERATURE_VALUES } from '../../../constants';
+import { getLastElementsOfArray } from '../../../utils/array';
 
 ChartJS.register(
   CategoryScale,
@@ -48,7 +49,7 @@ const parseMeasures = (measures) => {
   };
 };
 
-const TemperatureChart = ({ measures, device }) => {
+const TemperatureChart = ({ measures, device, maxValues }) => {
   if (!measures || !device) {
     return null;
   }
@@ -102,7 +103,7 @@ const TemperatureChart = ({ measures, device }) => {
         key={id}
         datasetIdKey={id}
         id={id}
-        data={parseMeasures(measures)}
+        data={parseMeasures(getLastElementsOfArray(measures, maxValues))}
         options={options}
         redraw={false}
       />
@@ -117,12 +118,14 @@ TemperatureChart.propTypes = {
   device: PropTypes.shape({
     name: PropTypes.string,
     id: PropTypes.string
-  })
+  }),
+  maxValues: PropTypes.number
 };
 
 TemperatureChart.defaultProps = {
   measures: null,
-  device: null
+  device: null,
+  maxValues: 30
 };
 
 export default TemperatureChart;
